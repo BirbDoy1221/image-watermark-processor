@@ -1,29 +1,39 @@
 from tkinter import *
 from tkinter import ttk
-from PIL import ImageTk, Image, ImageEnhance
-from sys import argv
 
-link = argv[1]
-
-img = Image.open(link)
-enh = ImageEnhance.Contrast(img)
-
-box = (0, 0, 64, 64)
-region = img.crop(box)
-region = region.transpose(Image.Transpose.ROTATE_180)
-img.paste(region, box)
+def calculate(*args):
+    try:
+        value = float(feet.get())
+        meters.set(int(0.3048 * value * 10000.0) / 10000.0)
+    except ValueError:
+        pass
 
 
 root = Tk()
-img = ImageTk.PhotoImage(img)
-root.title('Random Image Composer')
+root.title("Feet to Meters")
 
-
-mainframe = ttk.Frame(root)
+mainframe = ttk.Frame(root, padding="3 3 12 12")
 mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
-ttk.Label(mainframe, image=img).grid(column=3, row=1, sticky=(W,E))
 
+feet = StringVar()
+feet_entry = ttk.Entry(mainframe, width=7, textvariable=feet)
+feet_entry.grid(column=2, row=1, sticky=(W, E))
+
+meters = StringVar()
+ttk.Label(mainframe, textvariable=meters).grid(column=2, row=2, sticky=(W, E))
+
+ttk.Button(mainframe, text="Calculate", command=calculate).grid(column=3, row=3, sticky=W)
+
+ttk.Label(mainframe, text="feet").grid(column=3, row=1, sticky=W)
+ttk.Label(mainframe, text="meters"). grid(column=3, row=2, sticky=W)
+ttk.Label(mainframe, text="is equivalent to").grid(column=1, row=2, sticky=E)
+
+for child in mainframe.winfo_children():
+    child.grid_configure(padx=5, pady=5)
+
+feet_entry.focus()
+root.bind("<Return>", calculate)
 
 root.mainloop()
