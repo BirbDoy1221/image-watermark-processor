@@ -6,7 +6,7 @@ def calculate(*args):
         value = float(feet.get())
         meters.set(int(0.3048 * value * 10000.0) / 10000.0)
     except ValueError:
-        pass
+        meters.set("Invalid")
                                                                                                                                                                                                                                                                                                                         
 
 root = Tk()
